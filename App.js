@@ -1,36 +1,105 @@
-import * as React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+    import {
+      SafeAreaView,
+      StyleSheet,
+      ScrollView,
+      View,
+      Text,
+      StatusBar,
+      Button,
+      Alert
+    } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>To get started, edit App.js</Text>
-      <Text style={styles.instructions}>{instructions}</Text>
-    </View>
-  );
-}
+    import {
+      Header,
+      Colors,
+    } from 'react-native/Libraries/NewAppScreen';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+
+    import NotificationService from './src/service/NotificationService';
+
+    class App extends Component {
+
+      constructor(props) {
+        super(props);
+            //creating a new instance of the NotificationService 
+            //& passing in the function we want called when the notification happens
+        this.notification = new NotificationService(this.onNotification);
+      }
+
+        //Gets called when the notification comes in
+      onNotification = (notif) => {
+        Alert.alert(notif.title, notif.message);
+      }
+
+        //Permissions to use notifications
+      handlePerm(perms) {
+        Alert.alert("Permissions", JSON.stringify(perms));
+      }
+
+      render(){
+        return (
+          <>
+            <StatusBar barStyle="dark-content" />
+            <SafeAreaView>
+              <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                style={styles.scrollView}>
+                <Header />
+                {global.HermesInternal == null ? null : (
+                  <View style={styles.engine}>
+                    <Text style={styles.footer}>Engine: Hermes</Text>
+                  </View>
+                )}
+                <View style={styles.body}>
+                  <Button title={"Local Notification"} onPress={() => { this.notification.localNotification() }} />
+                  <Button title={"Scheduled (5s) Notification"} onPress={() => { this.notification.scheduleNotification() }} />
+                </View>
+              </ScrollView>
+            </SafeAreaView>
+          </>
+        );
+      }
+    }
+
+    const styles = StyleSheet.create({
+      scrollView: {
+        backgroundColor: Colors.lighter,
+      },
+      engine: {
+        position: 'absolute',
+        right: 0,
+      },
+      body: {
+        backgroundColor: Colors.white,
+      },
+      sectionContainer: {
+        marginTop: 32,
+        paddingHorizontal: 24,
+      },
+      sectionTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+        color: Colors.black,
+      },
+      sectionDescription: {
+        marginTop: 8,
+        fontSize: 18,
+        fontWeight: '400',
+        color: Colors.dark,
+      },
+      highlight: {
+        fontWeight: '700',
+      },
+      footer: {
+        color: Colors.dark,
+        fontSize: 12,
+        fontWeight: '600',
+        padding: 4,
+        paddingRight: 12,
+        textAlign: 'right',
+      },
+    });
+
+    export default App;
