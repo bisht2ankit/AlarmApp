@@ -1,0 +1,17 @@
+{
+  "name": "AlarmApp",
+  "displayName": "AlarmApp",
+  "expo": {
+    "name": "AlarmApp",
+    "slug": "expo-template-bare",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
